@@ -1,0 +1,32 @@
+.notification-container {
+  position: relative;
+}
+
+.bell-icon {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white; /* Ensure the bell icon is visible */
+}
+
+.notification-dropdown {
+  position: absolute;
+  right: 0;
+  background: white; /* Ensure the background is white */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it stays on top */
+  width: 200px; /* Set a width for the dropdown */
+}
+
+.notification-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  color: black; /* Ensure the text color is visible */
+}
+
+.notification-item:last-child {
+  border-bottom: none; /* Remove border for the last item */
+} 

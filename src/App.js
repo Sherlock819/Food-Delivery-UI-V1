@@ -4,6 +4,10 @@ import Auth from './components/Auth';
 import OrderForm from './components/OrderForm';
 import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
+import UserProfile from './components/UserProfile';
+import UserList from './components/UserList';
+import AuthCheck from './components/AuthCheck';
+import Notification from './components/Notification';
 import './App.css';
 
 // Protected Route wrapper component
@@ -20,11 +24,28 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [isWebSocketAlive, setIsWebSocketAlive] = useState(false);
 
   useEffect(() => {
     // Check for token on app load
     const token = localStorage.getItem('authToken');
     setIsAuthenticated(!!token);
+  }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket URL
+
+    socket.onopen = () => {
+      setIsWebSocketAlive(true);
+    };
+
+    socket.onclose = () => {
+      setIsWebSocketAlive(false);
+    };
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const addNotification = (message) => {
@@ -34,10 +55,15 @@ function App() {
     }
   };
 
+  // Function to clear notifications
+  const clearNotifications = () => {
+    setNotifications([]); // Clear notifications
+  };
+
   return (
     <Router>
       <div className="App">
-        <Navbar notifications={notifications} />
+        <Navbar notifications={notifications} isWebSocketAlive={isWebSocketAlive} clearNotifications={clearNotifications} />
         <Routes>
           <Route 
             path="/login" 
@@ -62,6 +88,18 @@ function App() {
                 <OrderForm addNotification={addNotification} />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/user-profile"
+            element={<UserProfile />}
+          />
+          <Route
+            path="/user-list"
+            element={<UserList />}
+          />
+          <Route
+            path="/auth-check"
+            element={<AuthCheck />}
           />
           <Route 
             path="/" 

@@ -1,18 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Dashboard.css';
 
 const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <h2>Dashboard</h2>
       <nav>
-        <ul>
+        <ul className="dashboard-nav">
           <li>
-            <Link to="/order">Place an Order</Link>
+            <Link to="/order" className="dashboard-link">Place an Order</Link>
           </li>
-          {/* Add more navigation options as needed */}
           <li>
-            <Link to="/some-other-route">Some Other Route</Link>
+            <Link to="/user-list" className="dashboard-link">View Users</Link>
+          </li>
+          <li>
+            <Link to="/auth-check" className="dashboard-link">Check Authentication</Link>
+          </li>
+          <li>
+            <Link to="/user-profile" className="dashboard-link">Edit Profile</Link>
           </li>
         </ul>
       </nav>

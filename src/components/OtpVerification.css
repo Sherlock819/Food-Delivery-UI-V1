@@ -21,4 +21,9 @@
   margin-bottom: 1.5rem;
 }
 
+.error-message {
+  color: red; /* Red color for error messages */
+  margin: 10px 0; /* Space around the error message */
+}
+
 /* Rest of the styles are same as LoginForm.css */ 

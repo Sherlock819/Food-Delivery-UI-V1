@@ -9,6 +9,7 @@ const OrderForm = ({ addNotification }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState('PENDING');
   const [orderId, setOrderId] = useState(null);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const handleOrderItemChange = (index, field, value) => {
     const newOrderItems = [...orderItems];
@@ -40,18 +41,21 @@ const OrderForm = ({ addNotification }) => {
       if (response.ok) {
         const data = await response.json();
         setOrderId(data.orderId);
-        alert('Order placed successfully!');
+        addNotification('Order placed successfully!');
 
         // Establish WebSocket connection and subscribe to order updates
         connectWebSocket(data.orderId, (message) => {
           console.log('Order update received:', message);
           addNotification(`Order Update: ${message.status}`);
         });
+
+        setOrderSuccess(true);
+        setTimeout(() => setOrderSuccess(false), 3000);
       } else {
         throw new Error('Failed to place order');
       }
     } catch (error) {
-      alert(`Error placing order: ${error.message}`);
+      addNotification(`Error placing order: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +68,7 @@ const OrderForm = ({ addNotification }) => {
   }, []);
 
   return (
-    <div className="order-container">
+    <div className={`order-container ${orderSuccess ? 'celebrate' : ''}`}>
       <form onSubmit={handleSubmit} className="order-form">
         <h2>Place Your Order</h2>
         <div className="form-group">
@@ -115,6 +119,7 @@ const OrderForm = ({ addNotification }) => {
           {isLoading ? 'Placing Order...' : 'Place Order'}
         </button>
       </form>
+      {orderSuccess && <div className="celebration-animation">🎉</div>}
     </div>
   );
 };

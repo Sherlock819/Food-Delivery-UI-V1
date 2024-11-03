@@ -8,23 +8,50 @@
   font-size: 1.5rem;
   cursor: pointer;
   color: white; /* Ensure the bell icon is visible */
+  position: relative; /* For positioning the count */
+  transition: transform 0.3s; /* Smooth transition */
+}
+
+.bell-icon.glow {
+  animation: glow 1s infinite alternate; /* Glowing effect */
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #fff, 0 0 10px #007bff, 0 0 15px #007bff; }
+  100% { text-shadow: 0 0 10px #fff, 0 0 20px #007bff, 0 0 30px #007bff; }
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 0.8rem;
 }
 
 .notification-dropdown {
-  position: absolute;
-  right: 0;
-  background: white; /* Ensure the background is white */
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure it stays on top */
-  width: 200px; /* Set a width for the dropdown */
+  max-height: 200px; /* Limit height */
+  overflow-y: auto; /* Enable scrolling */
+  background-color: white; /* Background color */
+  border: 1px solid #ddd; /* Border */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  position: absolute; /* Positioning */
+  z-index: 1000; /* Ensure it appears above other elements */
+  width: 200px; /* Set width */
 }
 
 .notification-item {
-  padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
-  color: black; /* Ensure the text color is visible */
+  padding: 10px; /* Padding for items */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+
+.notification-item:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
 }
 
 .notification-item:last-child {

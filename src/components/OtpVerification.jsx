@@ -4,10 +4,12 @@ import './OtpVerification.css';
 const OtpVerification = ({ email, onLoginSuccess }) => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null); // State to hold error messages
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null); // Reset error state
 
     try {
       const response = await fetch('http://localhost:8080/user/auth/validate-otp', {
@@ -19,16 +21,19 @@ const OtpVerification = ({ email, onLoginSuccess }) => {
       });
 
       const data = await response.json();
-      console.log("Response token : ",data);
-      if (data.token) {
-        // Save JWT token to localStorage
-        localStorage.setItem('authToken', data.token);
-        onLoginSuccess();
+      if (response.ok) {
+        if (data.token) {
+          // Save JWT token to localStorage
+          localStorage.setItem('authToken', data.token);
+          onLoginSuccess();
+        } else {
+          throw new Error('Invalid OTP');
+        }
       } else {
-        throw new Error('Invalid OTP');
+        throw new Error(data.message || 'Error verifying OTP');
       }
     } catch (error) {
-      alert(`Error verifying OTP: ${error.message}`);
+      setError(error.message); // Set error message
     } finally {
       setIsLoading(false);
     }
@@ -39,6 +44,7 @@ const OtpVerification = ({ email, onLoginSuccess }) => {
       <form onSubmit={handleSubmit} className="otp-form">
         <h2>Enter OTP</h2>
         <p>Please enter the OTP sent to {email}</p>
+        {error && <div className="error-message">Error: {error}</div>} {/* Display error message */}
         <div className="form-group">
           <input
             type="text"
